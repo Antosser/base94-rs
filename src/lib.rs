@@ -35,7 +35,7 @@
 //! ## Examples
 //!
 //! ```
-//! use base94_encoding::{base94_encode, base94_decode};
+//! use base94::{base94_encode, base94_decode};
 //!
 //! let data = b"Example data for encoding.";
 //! let base = 50;
@@ -76,7 +76,7 @@ pub static CHARACTERS: &[u8; 94] = include_bytes!("characters.txt");
 /// # Examples
 ///
 /// ```
-/// use base94_encoding::base94_encode;
+/// use base94::base94_encode;
 ///
 /// let data = b"Hello, World!";
 /// let base = 94;
@@ -119,7 +119,7 @@ pub fn base94_encode(data: &[u8], base: u8) -> String {
 /// # Examples
 ///
 /// ```
-/// use base94_encoding::base94_decode;
+/// use base94::base94_decode;
 ///
 /// let encoded = "A@#D9e@D9n9RRb6^";
 /// let base = 94;
