@@ -17,18 +17,18 @@ base94 = "0.1.0"
 ```
 Then, in your Rust code:
 ```rust
-use base94::{base94_encode, base94_decode};
+use base94::{encode, decode};
 
 fn main() {
     let data = b"Hello, World!";
     let base = 94;
 
     // Encode data
-    let encoded = base94_encode(data, base);
+    let encoded = encode(data, base);
     println!("Encoded: {}", encoded);
 
     // Decode data
-    let decoded = base94_decode(&encoded, base).unwrap();
+    let decoded = decode(&encoded, base).unwrap();
     println!("Decoded: {:?}", decoded);
 }
 ```
@@ -40,13 +40,13 @@ The encoding and decoding functions support various bases within the range of 2 
 
 Encoding and decoding example with a base of 50:
 ```rust
-use base94::{base94_encode, base94_decode};
+use base94::{encode, decode};
 
 let data = b"Example data for encoding.";
 let base = 50;
 
-let encoded = base94_encode(data, base);
-let decoded = base94_decode(&encoded, base).unwrap();
+let encoded = encode(data, base);
+let decoded = decode(&encoded, base).unwrap();
 
 assert_eq!(decoded, data);
 ```

@@ -17,12 +17,12 @@
 //! Then, you can use the provided functions in your Rust code:
 //!
 //! ```rust
-//! use base94::{base94_encode, base94_decode};
+//! use base94::{encode, decode};
 //!
 //! let data = b"Hello, World!";
 //! let base = 94;
-//! let encoded = base94_encode(data, base);
-//! let decoded = base94_decode(&encoded, base).unwrap();
+//! let encoded = encode(data, base);
+//! let decoded = decode(&encoded, base).unwrap();
 //!
 //! assert_eq!(decoded, data);
 //! ```
@@ -35,13 +35,13 @@
 //! ## Examples
 //!
 //! ```
-//! use base94::{base94_encode, base94_decode};
+//! use base94::{encode, decode};
 //!
 //! let data = b"Example data for encoding.";
 //! let base = 50;
 //!
-//! let encoded = base94_encode(data, base);
-//! let decoded = base94_decode(&encoded, base).unwrap();
+//! let encoded = encode(data, base);
+//! let decoded = decode(&encoded, base).unwrap();
 //!
 //! assert_eq!(decoded, data);
 //! ```
@@ -58,7 +58,7 @@ pub static CHARACTERS: &[u8; 94] = include_bytes!("characters.txt");
 /// Base94 encoding is a method of converting binary data into a text-based format using
 /// a larger character set than Base64. The provided base specifies the number of unique
 /// characters used in the encoding, ranging from 2 to 94. The encoded string can later be
-/// decoded back to the original data using the `base94_decode` function.
+/// decoded back to the original data using the `decode` function.
 ///
 /// # Arguments
 ///
@@ -76,14 +76,14 @@ pub static CHARACTERS: &[u8; 94] = include_bytes!("characters.txt");
 /// # Examples
 ///
 /// ```
-/// use base94::base94_encode;
+/// use base94::encode;
 ///
 /// let data = b"Hello, World!";
 /// let base = 94;
-/// let encoded = base94_encode(data, base);
+/// let encoded = encode(data, base);
 /// println!("Encoded: {}", encoded);
 /// ```
-pub fn base94_encode(data: &[u8], base: u8) -> String {
+pub fn encode(data: &[u8], base: u8) -> String {
     assert!(base <= 94, "Base must be less than or equal to 94");
     assert!(base >= 2, "Base must be greater than or equal to 2");
 
@@ -104,7 +104,7 @@ pub fn base94_encode(data: &[u8], base: u8) -> String {
 /// Base94 encoding is a method of converting binary data into a text-based format using
 /// a larger character set than Base64. The provided base specifies the number of unique
 /// characters used in the encoding, ranging from 2 to 94. The encoded string should have
-/// been generated using the `base94_encode` function with the same base.
+/// been generated using the `encode` function with the same base.
 ///
 /// # Arguments
 ///
@@ -119,14 +119,14 @@ pub fn base94_encode(data: &[u8], base: u8) -> String {
 /// # Examples
 ///
 /// ```
-/// use base94::base94_decode;
+/// use base94::decode;
 ///
 /// let encoded = "A@#D9e@D9n9RRb6^";
 /// let base = 94;
-/// let decoded = base94_decode(encoded, base).unwrap();
+/// let decoded = decode(encoded, base).unwrap();
 /// println!("Decoded: {:?}", decoded);
 /// ```
-pub fn base94_decode(encoded: &str, base: u8) -> Option<Vec<u8>> {
+pub fn decode(encoded: &str, base: u8) -> Option<Vec<u8>> {
     let mut num = BigUint::from(0u8);
     let mut power = BigUint::from(1u8);
 
@@ -150,8 +150,8 @@ mod tests {
     fn test_encode_decode_empty() {
         for base in 2..=MAX_BASE {
             let data = [0];
-            let encoded = base94_encode(&data, base);
-            let decoded = base94_decode(&encoded, base).unwrap();
+            let encoded = encode(&data, base);
+            let decoded = decode(&encoded, base).unwrap();
             assert_eq!(decoded, data);
         }
     }
@@ -160,8 +160,8 @@ mod tests {
     fn test_encode_decode_single_byte() {
         for base in 2..=MAX_BASE {
             let data = [65]; // ASCII value of 'A'
-            let encoded = base94_encode(&data, base);
-            let decoded = base94_decode(&encoded, base).unwrap();
+            let encoded = encode(&data, base);
+            let decoded = decode(&encoded, base).unwrap();
             assert_eq!(decoded, data);
         }
     }
@@ -170,8 +170,8 @@ mod tests {
     fn test_encode_decode_hello_world() {
         for base in 2..=MAX_BASE {
             let data = b"Hello, World!";
-            let encoded = base94_encode(data, base);
-            let decoded = base94_decode(&encoded, base).unwrap();
+            let encoded = encode(data, base);
+            let decoded = decode(&encoded, base).unwrap();
             assert_eq!(decoded, data);
         }
     }
@@ -180,8 +180,8 @@ mod tests {
     fn test_encode_decode_max_value() {
         for base in 2..=MAX_BASE {
             let data = [255, 255, 255]; // Three bytes of value 255
-            let encoded = base94_encode(&data, base);
-            let decoded = base94_decode(&encoded, base).unwrap();
+            let encoded = encode(&data, base);
+            let decoded = decode(&encoded, base).unwrap();
             assert_eq!(decoded, data);
         }
     }
@@ -190,8 +190,8 @@ mod tests {
     fn test_encode_decode_large_data() {
         for base in 2..=MAX_BASE {
             let data = vec![42; 1000]; // 1000 bytes of value 42 ('*')
-            let encoded = base94_encode(&data, base);
-            let decoded = base94_decode(&encoded, base).unwrap();
+            let encoded = encode(&data, base);
+            let decoded = decode(&encoded, base).unwrap();
             assert_eq!(decoded, data);
         }
     }
