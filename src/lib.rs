@@ -50,6 +50,7 @@
 use num::BigUint;
 use num::Integer;
 use num::ToPrimitive;
+use thiserror::Error;
 
 pub static CHARACTERS: &[u8; 94] = include_bytes!("characters.txt");
 
@@ -99,6 +100,12 @@ pub fn encode(data: &[u8], base: u8) -> String {
     out
 }
 
+#[derive(Error, Debug)]
+pub enum DecodeError {
+    #[error("Invalid character '{c}' at position {position}")]
+    InvalidCharacter { c: u8, position: usize },
+}
+
 /// Decodes a Base94-encoded string back to its original byte representation using the specified base.
 ///
 /// Base94 encoding is a method of converting binary data into a text-based format using
@@ -126,18 +133,25 @@ pub fn encode(data: &[u8], base: u8) -> String {
 /// let decoded = decode(encoded, base).unwrap();
 /// println!("Decoded: {:?}", decoded);
 /// ```
-pub fn decode(encoded: &str, base: u8) -> Option<Vec<u8>> {
+pub fn decode(encoded: &str, base: u8) -> Result<Vec<u8>, DecodeError> {
     let mut num = BigUint::from(0u8);
     let mut power = BigUint::from(1u8);
 
-    for c in encoded.chars() {
-        let index = CHARACTERS.iter().position(|&x| x == c as u8)?;
+    for (i, c) in encoded.chars().enumerate() {
+        let index =
+            CHARACTERS
+                .iter()
+                .position(|&x| x == c as u8)
+                .ok_or(DecodeError::InvalidCharacter {
+                    c: c as u8,
+                    position: i,
+                })?;
         num += BigUint::from(index) * &power;
         power *= BigUint::from(base);
     }
 
     let out = num.to_bytes_le();
-    Some(out)
+    Ok(out)
 }
 
 #[cfg(test)]
