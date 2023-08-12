@@ -8,6 +8,7 @@ Convert binary data to a compact text-based format using Base94 encoding. Effort
 - Decode Base94-encoded strings back to their original binary form.
 
 ## Usage
+### As a library
 
 To use this library, add it as a dependency in your `Cargo.toml`:
 
@@ -32,6 +33,25 @@ fn main() {
     println!("Decoded: {:?}", decoded);
 }
 ```
+
+### As a CLI
+To install the CLI, run `cargo install base94`. This will install the `base94cli` binary to your system.
+```
+Base94 encoding/decoding library
+
+Usage: base94cli.exe [OPTIONS] <OPERATION> <INPUT> <OUTPUT>
+
+Arguments:
+  <OPERATION>  Whether to encode or decode the input [possible values: encode, decode]
+  <INPUT>      The input file to encode or decode
+  <OUTPUT>     The output file to write the result to
+
+Options:
+  -b, --base <BASE>  The base to use for encoding or decoding. Must be between 2 and 94 (inclusive) [default: 94]
+  -h, --help         Print help
+  -V, --version      Print version
+```
+
 ## Supported Bases
 
 The encoding and decoding functions support various bases within the range of 2 to 94. The specified base must be consistent between encoding and decoding operations.
